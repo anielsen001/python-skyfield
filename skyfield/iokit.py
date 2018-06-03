@@ -11,6 +11,7 @@ from time import time
 from .jpllib import SpiceKernel
 from .sgp4lib import EarthSatellite
 from .timelib import Timescale, julian_date
+from .data.hipparcos import Hipparcos
 
 today = date.today
 
@@ -38,6 +39,7 @@ _IERS = 'https://hpiers.obspm.fr/iers/bul/bulc/'
 _JPL = 'ftp://ssd.jpl.nasa.gov/pub/eph/planets/bsp/'
 _NAIF = 'https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/satellites/'
 _USNO = 'http://maia.usno.navy.mil/ser7/'
+_HIP = 'ftp://cdsarc.u-strasbg.fr/cats/I/239/'
 
 class Loader(object):
     """A tool for downloading and opening astronomical data files.
@@ -98,6 +100,7 @@ class Loader(object):
                 ('jup*.bsp', _NAIF),
                 ('*.bsp', _JPL),
             ],
+            'hip_main.dat.gz': _HIP,
         }
         self.parsers = {
             'deltat.data': parse_deltat_data,
@@ -108,6 +111,7 @@ class Loader(object):
             '.bsp': [
                 ('*.bsp', SpiceKernel),
             ],
+            'hip_main.dat.gz': Hipparcos,
         }
 
     def path_to(self, filename):
