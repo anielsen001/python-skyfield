@@ -26,7 +26,8 @@ class Topos(VectorFunction):
     center_name = '399 EARTH'
 
     def __init__(self, latitude=None, longitude=None, latitude_degrees=None,
-                 longitude_degrees=None, elevation_m=0.0, x=0.0, y=0.0):
+                 longitude_degrees=None, elevation_m=0.0, x=0.0, y=0.0,
+                 site_name = None):
 
         if latitude_degrees is not None:
             latitude = Angle(degrees=latitude_degrees)
@@ -46,6 +47,8 @@ class Topos(VectorFunction):
                             ' or longitude=<skyfield.units.Angle object>'
                             ' with east being positive')
 
+        self.site_name = site_name
+        
         self.latitude = latitude
         self.longitude = longitude
         self.elevation = Distance(m=elevation_m)
@@ -55,7 +58,10 @@ class Topos(VectorFunction):
         self.R_lat = rot_y(latitude.radians)[::-1]
 
         self.target = object()  # TODO: make this more interesting
-        self.target_name = '{0} N {1} E'.format(self.latitude, self.longitude)
+        if self.site_name is not None:
+            self.target_name = '{0}: {1} N {2} E'.format(self.site_name, self.latitude, self.longitude)
+        else:
+            self.target_name = '{0} N {1} E'.format(self.latitude, self.longitude)
 
     def __str__(self):
         return 'Topos {0}'.format(self.target_name)
